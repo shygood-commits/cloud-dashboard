@@ -679,3 +679,56 @@ function switchTab(tab) {
         summaryBtn.className = 'px-6 py-3 text-sm text-on-surface-variant hover:text-primary transition-all';
     }
 }
+
+// ── 8. 로컬 DB 수동 수정 후 웹 배포 즉시 강제 갱신 ──────────────────────────────────
+async function triggerForceSync() {
+    const btn = document.getElementById('btn-force-sync');
+    const badge = document.getElementById('sync-badge');
+    const icon = document.getElementById('sync-icon');
+    const text = document.getElementById('sync-text');
+    
+    if (!btn) return;
+    
+    // UI 상태를 동기화 중으로 변경
+    btn.disabled = true;
+    btn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">sync</span><span>반영 중...</span>`;
+    
+    if (badge && icon && text) {
+        badge.className = 'flex items-center gap-2 px-3.5 py-1.5 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-full text-xs font-semibold shadow-sm transition-all';
+        icon.innerText = 'sync';
+        icon.classList.remove('animate-pulse');
+        icon.classList.add('animate-spin', 'text-yellow-600');
+        text.innerText = '로컬 DB 변경사항 감지 & Git Push 배포 중...';
+    }
+    
+    try {
+        const res = await fetch('/api/sync/force', { method: 'POST' });
+        const result = await res.json();
+        
+        if (res.ok && result.success) {
+            alert('🎉 성공: 로컬 DB 변경 사항이 성공적으로 GitHub에 업로드되었습니다!\n약 1~2분 후 클라우드플레어 웹사이트(https://cloud-dashboard-ciy.pages.dev/)에 자동 반영됩니다.');
+            
+            // 로컬 데이터도 즉시 새로고침
+            await fetchDataAndRender();
+        } else {
+            throw new Error(result.error || '동기화 실패');
+        }
+    } catch (err) {
+        console.error('강제 동기화 실패:', err);
+        alert(`❌ 에러: 웹 배포 반영에 실패했습니다. (원인: ${err.message})\n로컬 서버(server.js)가 정상 구동 중인지 확인해 주세요.`);
+    } finally {
+        // UI 복구
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined text-sm">publish</span><span>웹 배포 즉시 반영</span>`;
+        
+        // 동기화 상태 다시 확인 후 뱃지 업데이트
+        try {
+            const statusRes = await fetch('/api/status');
+            if (statusRes.ok) {
+                const status = await statusRes.json();
+                updateSyncBadge(status);
+            }
+        } catch (e) {}
+    }
+}
+

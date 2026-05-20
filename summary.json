@@ -1,17 +1,17 @@
 {
-  "grandTotal": 4729781857.986676,
+  "grandTotal": 4889334334.3277,
   "monthly": [
     {
       "month": "25년12월",
-      "totalCost": 1675291336.986676
+      "totalCost": 1834843556.0527608
     },
     {
       "month": "26년01월",
-      "totalCost": 1611988689
+      "totalCost": 1611988814.5303707
     },
     {
       "month": "26년02월",
-      "totalCost": 1442501832
+      "totalCost": 1442501963.7445674
     }
   ]
 }

@@ -160,10 +160,16 @@
 </div>
 </div>
 <div class="flex items-center gap-4">
-<!-- Google Drive Realtime Sync Badge -->
-<div class="flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-xs font-semibold shadow-sm transition-all" id="sync-badge">
-    <span class="material-symbols-outlined text-sm animate-pulse" id="sync-icon">cloud_sync</span>
-    <span id="sync-text">드라이브 연결 확인 중...</span>
+<!-- Google Drive Realtime Sync Badge & Force Publish Button -->
+<div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-xs font-semibold shadow-sm transition-all" id="sync-badge">
+        <span class="material-symbols-outlined text-sm animate-pulse" id="sync-icon">cloud_sync</span>
+        <span id="sync-text">드라이브 연결 확인 중...</span>
+    </div>
+    <button class="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#003d9b] hover:bg-[#002f77] text-white rounded-full text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer" id="btn-force-sync" onclick="triggerForceSync()" title="로컬 DB 수동 수정 후 웹 배포 즉시 강제 갱신">
+        <span class="material-symbols-outlined text-sm">publish</span>
+        <span>웹 배포 즉시 반영</span>
+    </button>
 </div>
 <button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors cursor-pointer active:scale-95">
 <span class="material-symbols-outlined">notifications</span>
