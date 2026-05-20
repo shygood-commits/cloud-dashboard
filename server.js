@@ -202,8 +202,6 @@ function processCSVFile(filePath) {
               syncStatus.processedRows = insertedCount;
               syncStatus.status = '완료 (정상 연동됨)';
               
-              // 데이터 적재가 완료되면 정적 JSON 빌드 및 깃허브 배포 수행
-              exportStaticJSON();
               resolve();
             }
           });
@@ -298,8 +296,6 @@ function processXLSXFile(filePath) {
               syncStatus.processedRows = insertedCount;
               syncStatus.status = '완료 (정상 연동됨)';
               
-              // 데이터 적재가 완료되면 정적 JSON 빌드 및 깃허브 배포 수행
-              exportStaticJSON();
               resolve();
             }
           });
@@ -421,6 +417,10 @@ async function scanAndProcessExistingFiles() {
         console.error(`[에러] 파일 처리 중 실패: ${file} - ${err.message}`);
       }
     }
+    
+    // 멱등적으로 모든 적재가 안전하게 끝난 뒤, 비동기 충돌 없이 단 한 번만 JSON 빌드 및 Git 자동 푸시를 수행합니다!
+    console.log('[완료] 모든 기존 데이터 파일 적재 완료. 정적 JSON 빌드 작업을 실행합니다.');
+    exportStaticJSON();
   } catch (err) {
     console.error('기존 파일 스캔 에러:', err.message);
   }
@@ -447,13 +447,23 @@ if (fs.existsSync(WATCH_DIR)) {
     .on('add', (filePath) => {
       const ext = filePath.toLowerCase();
       if (ext.endsWith('.csv') || ext.endsWith('.xlsx')) {
-        processFile(filePath);
+        processFile(filePath)
+          .then(() => {
+            console.log(`[실시간 동기화] 신규 파일 적재 성공 -> 정적 JSON 빌드`);
+            exportStaticJSON();
+          })
+          .catch((err) => console.error(`[실시간 동기화] 신규 파일 적재 실패:`, err.message));
       }
     })
     .on('change', (filePath) => {
       const ext = filePath.toLowerCase();
       if (ext.endsWith('.csv') || ext.endsWith('.xlsx')) {
-        processFile(filePath);
+        processFile(filePath)
+          .then(() => {
+            console.log(`[실시간 동기화] 파일 수정 반영 성공 -> 정적 JSON 빌드`);
+            exportStaticJSON();
+          })
+          .catch((err) => console.error(`[실시간 동기화] 파일 수정 반영 실패:`, err.message));
       }
     })
     .on('error', (error) => {
