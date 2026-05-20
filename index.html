@@ -1,272 +1,512 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NovaCloud - 최첨단 글래스모피즘 기반 실시간 클라우드 리소스 분석 및 모니터링 대시보드">
-    <title>NovaCloud // Premium Cloud Dashboard</title>
-    <!-- Google Fonts: Outfit -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons for premium visual cues -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="glow-bg-elements">
-        <div class="glow-circle glow-1" id="glow-circle-1"></div>
-        <div class="glow-circle glow-2" id="glow-circle-2"></div>
-    </div>
 
-    <div class="dashboard-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar-navigation" id="sidebar-nav">
-            <div class="brand-logo">
-                <i data-lucide="cpu" class="neon-icon-purple"></i>
-                <span>Nova<strong>Cloud</strong></span>
-            </div>
-            <nav class="nav-menu">
-                <a href="#" class="nav-item active" id="nav-dash"><i data-lucide="layout-dashboard"></i> 대시보드</a>
-                <a href="#" class="nav-item" id="nav-servers"><i data-lucide="server"></i> 인스턴스 관리</a>
-                <a href="#" class="nav-item" id="nav-network"><i data-lucide="activity"></i> 네트워크 트래픽</a>
-                <a href="#" class="nav-item" id="nav-settings"><i data-lucide="settings"></i> 설정</a>
-            </nav>
-            <div class="user-profile-card">
-                <div class="avatar">SG</div>
-                <div class="user-info">
-                    <p class="user-name">Shygood</p>
-                    <p class="user-role">Cloud Architect</p>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Dashboard Area -->
-        <main class="main-content">
-            <!-- Header Section -->
-            <header class="dashboard-header">
-                <div class="header-title">
-                    <h1>Cloud Infrastructure Dashboard</h1>
-                    <p class="subtitle">실시간 인프라 가용성 및 리소스 모니터링 시스템</p>
-                </div>
-                <div class="header-actions">
-                    <div class="status-indicator online">
-                        <span class="pulse-dot"></span>
-                        <span class="status-text">Cloud Engine Active</span>
-                    </div>
-                    <button class="btn-refresh" id="btn-refresh-data">
-                        <i data-lucide="refresh-cw"></i>
-                        <span>새로고침</span>
-                    </button>
-                </div>
-            </header>
-
-            <!-- Metrics Grid -->
-            <section class="metrics-grid">
-                <!-- CPU Metric Card -->
-                <div class="metric-card glass-card" id="card-cpu">
-                    <div class="card-header">
-                        <span class="card-title">CPU 사용량</span>
-                        <i data-lucide="cpu" class="neon-accent-cyan"></i>
-                    </div>
-                    <div class="card-value-container">
-                        <span class="card-value" id="val-cpu">24%</span>
-                        <span class="card-trend upward"><i data-lucide="trending-up"></i> +1.2%</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar bar-cyan" id="progress-cpu" style="width: 24%"></div>
-                    </div>
-                </div>
-
-                <!-- Memory Metric Card -->
-                <div class="metric-card glass-card" id="card-memory">
-                    <div class="card-header">
-                        <span class="card-title">메모리 점유율</span>
-                        <i data-lucide="database" class="neon-accent-purple"></i>
-                    </div>
-                    <div class="card-value-container">
-                        <span class="card-value" id="val-memory">58%</span>
-                        <span class="card-trend downward"><i data-lucide="trending-down"></i> -0.4%</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar bar-purple" id="progress-memory" style="width: 58%"></div>
-                    </div>
-                </div>
-
-                <!-- Disk Storage Metric Card -->
-                <div class="metric-card glass-card" id="card-disk">
-                    <div class="card-header">
-                        <span class="card-title">스토리지 사용</span>
-                        <i data-lucide="hard-drive" class="neon-accent-pink"></i>
-                    </div>
-                    <div class="card-value-container">
-                        <span class="card-value" id="val-disk">41.8%</span>
-                        <span class="card-trend stable">안정적</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar bar-pink" id="progress-disk" style="width: 41.8%"></div>
-                    </div>
-                </div>
-
-                <!-- Network Metric Card -->
-                <div class="metric-card glass-card" id="card-network">
-                    <div class="card-header">
-                        <span class="card-title">네트워크 대역폭</span>
-                        <i data-lucide="arrow-up-down" class="neon-accent-blue"></i>
-                    </div>
-                    <div class="card-value-container">
-                        <span class="card-value" id="val-network">328 Mb/s</span>
-                        <span class="card-trend upward"><i data-lucide="trending-up"></i> +14%</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar bar-blue" id="progress-network" style="width: 65%"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Dashboard Analytics Grid (Charts & Controls) -->
-            <section class="analytics-grid">
-                <!-- SVG Chart Card -->
-                <div class="chart-container glass-card" id="chart-section">
-                    <div class="chart-header">
-                        <h2>실시간 트래픽 동향 (Real-time Network Traffic)</h2>
-                        <div class="chart-legend">
-                            <span class="legend-item"><span class="legend-color color-cyan"></span> Ingress</span>
-                            <span class="legend-item"><span class="legend-color color-purple"></span> Egress</span>
-                        </div>
-                    </div>
-                    <div class="svg-chart-wrapper">
-                        <!-- Custom SVG Chart -->
-                        <svg id="live-traffic-chart" viewBox="0 0 800 250" preserveAspectRatio="none">
-                            <defs>
-                                <linearGradient id="gradient-cyan" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="rgba(0, 242, 254, 0.4)"/>
-                                    <stop offset="100%" stop-color="rgba(0, 242, 254, 0)"/>
-                                </linearGradient>
-                                <linearGradient id="gradient-purple" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="rgba(157, 78, 221, 0.4)"/>
-                                    <stop offset="100%" stop-color="rgba(157, 78, 221, 0)"/>
-                                </linearGradient>
-                            </defs>
-                            <!-- Grid Lines -->
-                            <line x1="0" y1="50" x2="800" y2="50" stroke="rgba(255,255,255,0.05)" stroke-dasharray="5,5"/>
-                            <line x1="0" y1="100" x2="800" y2="100" stroke="rgba(255,255,255,0.05)" stroke-dasharray="5,5"/>
-                            <line x1="0" y1="150" x2="800" y2="150" stroke="rgba(255,255,255,0.05)" stroke-dasharray="5,5"/>
-                            <line x1="0" y1="200" x2="800" y2="200" stroke="rgba(255,255,255,0.05)" stroke-dasharray="5,5"/>
-                            
-                            <!-- Area Gradients -->
-                            <path id="area-ingress" d="" fill="url(#gradient-cyan)"/>
-                            <path id="area-egress" d="" fill="url(#gradient-purple)"/>
-                            
-                            <!-- Chart Lines -->
-                            <path id="path-ingress" d="" fill="none" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
-                            <path id="path-egress" d="" fill="none" stroke="#9D4EDD" stroke-width="3" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Activity Log & Console Terminal -->
-                <div class="console-container glass-card" id="console-section">
-                    <div class="console-header">
-                        <h2>시스템 알림 및 액티비티 로그</h2>
-                        <button class="btn-clear" id="btn-clear-logs">비우기</button>
-                    </div>
-                    <div class="console-terminal-body" id="console-logs">
-                        <div class="log-line system-log">
-                            <span class="log-time">[13:20:01]</span>
-                            <span class="log-tag">[SYSTEM]</span>
-                            <span class="log-text">NovaCloud 모니터링 엔진 초기화 완료.</span>
-                        </div>
-                        <div class="log-line system-log">
-                            <span class="log-time">[13:20:03]</span>
-                            <span class="log-tag">[SYSTEM]</span>
-                            <span class="log-text">클라우드 인스턴스 3개 활성화 감지됨.</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Instances Control Panel -->
-            <section class="server-control-panel glass-card" id="instances-section">
-                <div class="panel-header">
-                    <h2>서버 인스턴스 실시간 제어 센터</h2>
-                    <span class="badge">AWS / GCP 통합 환경</span>
-                </div>
-                <div class="table-responsive">
-                    <table class="instance-table" id="table-instances">
-                        <thead>
-                            <tr>
-                                <th>인스턴스 이름</th>
-                                <th>IP 주소</th>
-                                <th>리전</th>
-                                <th>상태</th>
-                                <th>CPU 부하</th>
-                                <th>작업</th>
-                            </tr>
-                        </thead>
-                        <tbody id="instance-list-body">
-                            <!-- Instance 1 -->
-                            <tr id="row-inst-1">
-                                <td class="instance-name-td">
-                                    <i data-lucide="server" class="active-server-icon"></i>
-                                    <span>Web-Server-01</span>
-                                </td>
-                                <td><code>13.125.4.110</code></td>
-                                <td>ap-northeast-2 (서울)</td>
-                                <td><span class="status-badge running" id="status-inst-1">RUNNING</span></td>
-                                <td id="cpu-inst-1">18%</td>
-                                <td>
-                                    <div class="action-btn-group">
-                                        <button class="btn-action stop" onclick="toggleServer('inst-1', 'stop')"><i data-lucide="square"></i> 정지</button>
-                                        <button class="btn-action restart" onclick="toggleServer('inst-1', 'restart')"><i data-lucide="refresh-cw"></i> 재부팅</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Instance 2 -->
-                            <tr id="row-inst-2">
-                                <td class="instance-name-td">
-                                    <i data-lucide="server" class="active-server-icon"></i>
-                                    <span>Database-Main</span>
-                                </td>
-                                <td><code>54.180.12.87</code></td>
-                                <td>ap-northeast-2 (서울)</td>
-                                <td><span class="status-badge running" id="status-inst-2">RUNNING</span></td>
-                                <td id="cpu-inst-2">35%</td>
-                                <td>
-                                    <div class="action-btn-group">
-                                        <button class="btn-action stop" onclick="toggleServer('inst-2', 'stop')"><i data-lucide="square"></i> 정지</button>
-                                        <button class="btn-action restart" onclick="toggleServer('inst-2', 'restart')"><i data-lucide="refresh-cw"></i> 재부팅</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Instance 3 -->
-                            <tr id="row-inst-3">
-                                <td class="instance-name-td">
-                                    <i data-lucide="server" class="stopped-server-icon"></i>
-                                    <span>API-Gateway-Dev</span>
-                                </td>
-                                <td><code>3.35.210.42</code></td>
-                                <td>us-east-1 (버진아시아)</td>
-                                <td><span class="status-badge stopped" id="status-inst-3">STOPPED</span></td>
-                                <td id="cpu-inst-3">0%</td>
-                                <td>
-                                    <div class="action-btn-group">
-                                        <button class="btn-action start" onclick="toggleServer('inst-3', 'start')"><i data-lucide="play"></i> 시작</button>
-                                        <button class="btn-action restart" onclick="toggleServer('inst-3', 'restart')" disabled><i data-lucide="refresh-cw"></i> 재부팅</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Lucide icons loader execution -->
-    <script>
-        lucide.createIcons();
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CloudCost Pro - Executive Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e8edff",
+                        "primary-fixed": "#dae2ff",
+                        "tertiary-fixed": "#ffdbcf",
+                        "on-surface": "#041b3c",
+                        "on-tertiary-container": "#ffc6b2",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#5c5f60",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-secondary-container": "#606365",
+                        "inverse-surface": "#1d3052",
+                        "surface-container-highest": "#d7e2ff",
+                        "outline-variant": "#c3c6d6",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#434654",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c5c6c8",
+                        "on-secondary-fixed-variant": "#444749",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9ff",
+                        "surface-tint": "#0c56d0",
+                        "secondary-fixed": "#e1e2e4",
+                        "secondary-container": "#dee0e2",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-primary-container": "#c4d2ff",
+                        "on-tertiary-fixed": "#380d00",
+                        "tertiary": "#7b2600",
+                        "tertiary-fixed-dim": "#ffb59b",
+                        "surface-container-low": "#f1f3ff",
+                        "on-primary-fixed": "#001848",
+                        "tertiary-container": "#a33500",
+                        "on-tertiary-fixed-variant": "#812800",
+                        "inverse-on-surface": "#edf0ff",
+                        "on-error": "#ffffff",
+                        "on-background": "#041b3c",
+                        "surface-dim": "#cadaff",
+                        "inverse-primary": "#b2c5ff",
+                        "background": "#f9f9ff",
+                        "primary": "#003d9b",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#0052cc",
+                        "outline": "#737685",
+                        "surface-container-high": "#e0e8ff",
+                        "surface-variant": "#d7e2ff",
+                        "error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "section-gap": "32px",
+                        "card-padding": "20px",
+                        "base": "8px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-xs": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "title-sm": ["Inter"]
+                    }
+                }
+            }
+        }
     </script>
-    <script src="app.js"></script>
-</body>
-</html>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); border: 1px solid #EBECF0; }
+        .provider-aws { border-top: 4px solid #FF9900; }
+        .provider-gcp { border-top: 4px solid #4285F4; }
+        .provider-azure { border-top: 4px solid #0089D6; }
+        .provider-tencent { border-top: 4px solid #00A4FF; }
+        
+        /* Custom scrollbar for data tables */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c3c6d6; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #737685; }
+
+        .active-tab { border-bottom: 2px solid #003d9b; color: #003d9b; font-weight: 600; }
+        .segmented-btn.active { background-color: #003d9b; color: #ffffff; }
+    </style>
+</head>
+<body class="text-on-background">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 z-40 bg-surface border-r border-outline-variant w-[280px] duration-200 ease-in-out">
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">cloud</span>
+</div>
+<div>
+<h1 class="text-headline-md font-headline-md text-primary leading-tight">Global Infrastructure</h1>
+<p class="text-on-surface-variant font-body-sm text-xs">Multi-Cloud Management</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-bold transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-sm text-body-sm">Summary</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-sm text-body-sm">Service Details</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-body-sm text-body-sm">Invoices</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-sm text-body-sm">Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant space-y-1">
+<button class="w-full mb-4 py-2.5 bg-primary text-on-primary rounded-lg font-bold text-sm shadow-sm hover:opacity-90 active:scale-95 transition-all">
+                Export Data
+            </button>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-sm text-body-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-sm text-body-sm">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] min-h-screen">
+<header class="flex justify-between items-center w-full px-container-margin h-16 sticky top-0 z-50 bg-surface-container-lowest border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-6">
+<span class="text-title-sm font-title-sm font-bold text-primary">CloudCost Pro</span>
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary" placeholder="Search resources..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Executive Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI7nT3rrzYdQ5qxaMyB5pU88sfi_Tfp0lXBjelN6LgrZqeK-9iM3T5l9MVRlW-2MEXFihNIxp_yOHb9aG-oyqO_CszjLwnq91Sp3mK-8hYrnfEBaB8ISOvlvGWuCedRgmsDRSxJUJcGjEDuiZQF2wuGj5WRmf7qhEtsz9yivAm2jAWisgF-x9NCm2_I2_Fi_nZij884WJWjinbFLanOWzMo94TvfCaB24mGNqLq4TPP9dzNupZT9PXFmSvluQ6h8kJwG08UkbGLZNZ"/>
+</div>
+</div>
+</header>
+<div class="p-container-margin space-y-section-gap">
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Executive Dashboard</h2>
+<p class="text-on-surface-variant font-body-md" id="dashboard-description">Infrastructure-wide cost efficiency and distribution analysis (Annual View).</p>
+</div>
+<div class="flex flex-col items-end gap-3">
+<div class="flex bg-surface-container-low p-1 rounded-lg border border-outline-variant">
+<button class="segmented-btn active px-4 py-1.5 text-sm font-semibold rounded-md transition-all" id="view-annual" onclick="toggleView('annual')">연간</button>
+<button class="segmented-btn px-4 py-1.5 text-sm font-semibold rounded-md transition-all text-on-surface-variant hover:bg-surface-container-high" id="view-monthly" onclick="toggleView('monthly')">월간</button>
+</div>
+<div class="flex gap-2">
+<span class="bg-surface-container-high px-3 py-1 rounded-full text-xs font-medium text-primary border border-outline-variant" id="period-badge">Period: Last 12 Months</span>
+<span class="bg-surface-container-high px-3 py-1 rounded-full text-xs font-medium text-primary border border-outline-variant">Currency: KRW (₩)</span>
+</div>
+</div>
+</div>
+<div class="flex border-b border-outline-variant">
+<button class="px-6 py-3 text-sm active-tab transition-all" id="tab-btn-summary" onclick="switchTab('summary')">요약 (Summary)</button>
+<button class="px-6 py-3 text-sm text-on-surface-variant hover:text-primary transition-all" id="tab-btn-details" onclick="switchTab('details')">서비스별 상세 (Service Details)</button>
+</div>
+</div>
+<div class="space-y-gutter" id="tab-summary">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Cost Distribution Card -->
+<div class="lg:col-span-5 glass-card rounded-xl p-card-padding shadow-sm flex flex-col items-center justify-center relative min-h-[400px]">
+<h3 class="absolute top-card-padding left-card-padding font-title-sm text-title-sm text-on-surface" id="dist-title">Cost Distribution (Annual)</h3>
+<div class="relative w-64 h-64 mt-8">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<circle cx="18" cy="18" fill="transparent" r="15.9" stroke="#FF9900" stroke-dasharray="45 100" stroke-dashoffset="25" stroke-width="3.8"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.9" stroke="#4285F4" stroke-dasharray="25 100" stroke-dashoffset="80" stroke-width="3.8"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.9" stroke="#0089D6" stroke-dasharray="20 100" stroke-dashoffset="100" stroke-width="3.8"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.9" stroke="#00A4FF" stroke-dasharray="10 100" stroke-dashoffset="110" stroke-width="3.8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-xs font-medium text-on-surface-variant uppercase">Total</span>
+<span class="text-lg font-bold text-on-surface" id="total-cost-val">₩1.24B</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-x-8 gap-y-2 mt-8 w-full">
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#FF9900]"></div><span class="text-xs font-medium">AWS (45%)</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#4285F4]"></div><span class="text-xs font-medium">GCP (25%)</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#0089D6]"></div><span class="text-xs font-medium">Azure (20%)</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#00A4FF]"></div><span class="text-xs font-medium">Tencent (10%)</span></div>
+</div>
+</div>
+<!-- Provider Breakdown Table -->
+<div class="lg:col-span-7 glass-card rounded-xl p-card-padding shadow-sm overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-sm text-title-sm text-on-surface">Provider Breakdown</h3>
+<button class="text-primary text-xs font-bold flex items-center gap-1 hover:underline">
+                                View Invoices <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left" id="breakdown-table">
+<thead class="text-label-xs font-label-xs text-on-surface-variant border-b border-outline-variant uppercase tracking-wider">
+<tr>
+<th class="pb-3 px-2">Provider</th>
+<th class="pb-3 px-2">Status</th>
+<th class="pb-3 px-2 text-right">Growth (MoM)</th>
+<th class="pb-3 px-2 text-right hidden" id="compare-col">Vs Prev Month</th>
+<th class="pb-3 px-2 text-right">Total Cost (KRW)</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-body-sm divide-y divide-outline-variant" id="table-body">
+<!-- Rows populated by JS -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Trend Chart Section -->
+<div class="glass-card rounded-xl p-card-padding shadow-sm h-[400px] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface" id="trend-title">1-Year Monthly Cost Trend</h3>
+<p class="text-xs text-on-surface-variant" id="trend-desc">Comparative analysis across all providers</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 text-xs"><div class="w-2 h-2 rounded-full bg-[#FF9900]"></div> AWS</div>
+<div class="flex items-center gap-2 text-xs"><div class="w-2 h-2 rounded-full bg-[#4285F4]"></div> GCP</div>
+<div class="flex items-center gap-2 text-xs"><div class="w-2 h-2 rounded-full bg-[#0089D6]"></div> Azure</div>
+<div class="flex items-center gap-2 text-xs"><div class="w-2 h-2 rounded-full bg-[#00A4FF]"></div> Tencent</div>
+</div>
+</div>
+<div class="flex-1 relative border-l border-b border-outline-variant mb-6 ml-10" id="chart-container">
+<!-- Chart SVG generated by JS -->
+</div>
+</div>
+</div>
+<!-- Tab Content: Service Details (Hidden by default) -->
+<div class="hidden space-y-gutter" id="tab-details">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Provider details cards remain static or minimal change -->
+<div class="glass-card rounded-xl overflow-hidden provider-aws shadow-sm">
+<div class="p-card-padding bg-surface-container-low flex justify-between items-center">
+<span class="font-bold text-on-surface">AWS Service Details</span>
+<span class="text-xs font-bold text-[#FF9900]">TOTAL: ₩558M</span>
+</div>
+<div class="p-4">
+<table class="w-full text-sm">
+<thead class="text-xs text-on-surface-variant border-b">
+<tr><th class="text-left pb-2">Service</th><th class="text-right pb-2">Cost (KRW)</th><th class="text-right pb-2">Share</th></tr>
+</thead>
+<tbody>
+<tr class="border-b border-outline-variant"><td class="py-3">EC2 (Compute)</td><td class="py-3 text-right">₩324,000,000</td><td class="py-3 text-right">58%</td></tr>
+<tr class="border-b border-outline-variant"><td class="py-3">RDS (Database)</td><td class="py-3 text-right">₩112,000,000</td><td class="py-3 text-right">20%</td></tr>
+<tr><td class="py-3">S3 (Storage)</td><td class="py-3 text-right">₩67,000,000</td><td class="py-3 text-right">12%</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Other provider cards simplified for brevity -->
+<div class="glass-card rounded-xl overflow-hidden provider-gcp shadow-sm">
+<div class="p-card-padding bg-surface-container-low flex justify-between items-center">
+<span class="font-bold text-on-surface">GCP Service Details</span>
+<span class="text-xs font-bold text-[#4285F4]">TOTAL: ₩310M</span>
+</div>
+<div class="p-4">
+<table class="w-full text-sm">
+<thead class="text-xs text-on-surface-variant border-b">
+<tr><th class="text-left pb-2">Service</th><th class="text-right pb-2">Cost (KRW)</th><th class="text-right pb-2">Share</th></tr>
+</thead>
+<tbody>
+<tr class="border-b border-outline-variant"><td class="py-3">Compute Engine</td><td class="py-3 text-right">₩155,000,000</td><td class="py-3 text-right">50%</td></tr>
+<tr><td class="py-3">BigQuery</td><td class="py-3 text-right">₩93,000,000</td><td class="py-3 text-right">30%</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        let currentView = 'annual';
+
+        const data = {
+            annual: {
+                total: '₩1.24B',
+                distribution: [45, 25, 20, 10],
+                breakdown: [
+                    { provider: 'AWS', color: '#FF9900', status: 'STABLE', growth: '+2.4%', cost: '₩558,000,000' },
+                    { provider: 'GCP', color: '#4285F4', status: 'MONITOR', growth: '-1.2%', cost: '₩310,000,000' },
+                    { provider: 'Azure', color: '#0089D6', status: 'STABLE', growth: '+0.8%', cost: '₩248,000,000' },
+                    { provider: 'Tencent', color: '#00A4FF', status: 'STABLE', growth: '-4.5%', cost: '₩124,000,000' }
+                ]
+            },
+            monthly: {
+                total: '₩104M',
+                distribution: [48, 22, 18, 12],
+                breakdown: [
+                    { provider: 'AWS', color: '#FF9900', status: 'STABLE', growth: '+1.5%', compare: '+₩1.2M', trend: 'up', cost: '₩50,000,000' },
+                    { provider: 'GCP', color: '#4285F4', status: 'STABLE', growth: '-2.1%', compare: '-₩0.5M', trend: 'down', cost: '₩23,000,000' },
+                    { provider: 'Azure', color: '#0089D6', status: 'MONITOR', growth: '+3.4%', compare: '+₩0.6M', trend: 'up', cost: '₩18,500,000' },
+                    { provider: 'Tencent', color: '#00A4FF', status: 'STABLE', growth: '-0.8%', compare: '-₩0.1M', trend: 'down', cost: '₩12,500,000' }
+                ],
+                chart: [
+                    { name: 'AWS', curr: 50, prev: 48.8 },
+                    { name: 'GCP', curr: 23, prev: 23.5 },
+                    { name: 'Azure', curr: 18.5, prev: 17.9 },
+                    { name: 'Tencent', curr: 12.5, prev: 12.6 }
+                ]
+            }
+        };
+
+        function toggleView(view) {
+            currentView = view;
+            const btnAnnual = document.getElementById('view-annual');
+            const btnMonthly = document.getElementById('view-monthly');
+            const periodBadge = document.getElementById('period-badge');
+            const dashDesc = document.getElementById('dashboard-description');
+            const distTitle = document.getElementById('dist-title');
+            const trendTitle = document.getElementById('trend-title');
+            const trendDesc = document.getElementById('trend-desc');
+            const totalVal = document.getElementById('total-cost-val');
+            const compareCol = document.getElementById('compare-col');
+
+            if (view === 'annual') {
+                btnAnnual.classList.add('active', 'bg-primary', 'text-on-primary');
+                btnAnnual.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high');
+                btnMonthly.classList.remove('active', 'bg-primary', 'text-on-primary');
+                btnMonthly.classList.add('text-on-surface-variant', 'hover:bg-surface-container-high');
+                
+                periodBadge.innerText = 'Period: Last 12 Months';
+                dashDesc.innerText = 'Infrastructure-wide cost efficiency and distribution analysis (Annual View).';
+                distTitle.innerText = 'Cost Distribution (Annual)';
+                trendTitle.innerText = '1-Year Monthly Cost Trend';
+                trendDesc.innerText = 'Comparative analysis across all providers';
+                totalVal.innerText = data.annual.total;
+                compareCol.classList.add('hidden');
+                
+                renderTable('annual');
+                renderLineChart();
+            } else {
+                btnMonthly.classList.add('active', 'bg-primary', 'text-on-primary');
+                btnMonthly.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high');
+                btnAnnual.classList.remove('active', 'bg-primary', 'text-on-primary');
+                btnAnnual.classList.add('text-on-surface-variant', 'hover:bg-surface-container-high');
+                
+                periodBadge.innerText = 'Period: Current Month (Aug 2024)';
+                dashDesc.innerText = 'Current month performance vs. previous month analysis.';
+                distTitle.innerText = 'Cost Distribution (This Month)';
+                trendTitle.innerText = 'Monthly Comparison (Current vs Previous)';
+                trendDesc.innerText = 'Budget utilization change per provider';
+                totalVal.innerText = data.monthly.total;
+                compareCol.classList.remove('hidden');
+
+                renderTable('monthly');
+                renderBarChart();
+            }
+        }
+
+        function renderTable(view) {
+            const body = document.getElementById('table-body');
+            body.innerHTML = '';
+            const list = data[view].breakdown;
+            
+            list.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-surface-container-low transition-colors group';
+                
+                const growthColor = item.growth.startsWith('+') ? 'text-error' : 'text-green-600';
+                const statusColor = item.status === 'STABLE' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700';
+
+                let compareHtml = '';
+                if (view === 'monthly') {
+                    const icon = item.trend === 'up' ? 'trending_up' : 'trending_down';
+                    const iconColor = item.trend === 'up' ? 'text-error' : 'text-green-600';
+                    compareHtml = `<td class="py-4 px-2 text-right font-medium ${iconColor} flex items-center justify-end gap-1">
+                                    <span class="material-symbols-outlined text-sm">${icon}</span> ${item.compare}
+                                   </td>`;
+                }
+
+                row.innerHTML = `
+                    <td class="py-4 px-2 flex items-center gap-3">
+                        <div class="w-1 h-8 rounded-full" style="background-color: ${item.color}"></div>
+                        <span class="font-semibold">${item.provider}</span>
+                    </td>
+                    <td class="py-4 px-2">
+                        <span class="px-2 py-0.5 rounded-full ${statusColor} text-[10px] font-bold uppercase">${item.status}</span>
+                    </td>
+                    <td class="py-4 px-2 text-right ${growthColor} font-medium">${item.growth}</td>
+                    ${compareHtml}
+                    <td class="py-4 px-2 text-right font-bold text-on-surface">${item.cost}</td>
+                `;
+                body.appendChild(row);
+            });
+        }
+
+        function renderLineChart() {
+            const container = document.getElementById('chart-container');
+            container.innerHTML = `
+                <svg class="w-full h-full preserve-3d" viewbox="0 0 1000 300">
+                    <path d="M0,200 L80,180 L160,190 L240,160 L320,150 L400,140 L480,145 L560,130 L640,120 L720,110 L800,105 L1000,100" fill="none" stroke="#FF9900" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+                    <path d="M0,250 L80,240 L160,245 L240,230 L320,220 L400,225 L480,210 L560,205 L640,200 L720,195 L800,190 L1000,185" fill="none" stroke="#4285F4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+                    <path d="M0,220 L80,210 L160,220 L240,215 L320,210 L400,205 L480,200 L560,215 L640,205 L720,210 L800,200 L1000,210" fill="none" stroke="#0089D6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+                    <path d="M0,280 L80,275 L160,280 L240,270 L320,275 L400,265 L480,270 L560,260 L640,265 L720,260 L800,265 L1000,260" fill="none" stroke="#00A4FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+                </svg>
+                <div class="absolute -left-10 top-0 h-full flex flex-col justify-between text-[10px] text-on-surface-variant font-medium">
+                    <span>150M</span><span>100M</span><span>50M</span><span>0</span>
+                </div>
+                <div class="absolute -bottom-6 w-full flex justify-between text-[10px] text-on-surface-variant font-medium">
+                    <span>SEP</span><span>OCT</span><span>NOV</span><span>DEC</span><span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span><span>JUL</span><span>AUG</span>
+                </div>
+            `;
+        }
+
+        function renderBarChart() {
+            const container = document.getElementById('chart-container');
+            const items = data.monthly.chart;
+            const colors = ['#FF9900', '#4285F4', '#0089D6', '#00A4FF'];
+            
+            let barsHtml = '';
+            items.forEach((item, i) => {
+                const xBase = 150 + i * 220;
+                const currHeight = item.curr * 4;
+                const prevHeight = item.prev * 4;
+                barsHtml += `
+                    <rect x="${xBase}" y="${280 - prevHeight}" width="30" height="${prevHeight}" fill="${colors[i]}" opacity="0.4" rx="2" />
+                    <rect x="${xBase + 40}" y="${280 - currHeight}" width="30" height="${currHeight}" fill="${colors[i]}" rx="2" />
+                    <text x="${xBase + 35}" y="295" font-size="12" text-anchor="middle" fill="#434654" font-weight="600">${item.name}</text>
+                `;
+            });
+
+            container.innerHTML = `
+                <svg class="w-full h-full" viewbox="0 0 1000 300">
+                    ${barsHtml}
+                    <line x1="0" y1="280" x2="1000" y2="280" stroke="#c3c6d6" />
+                </svg>
+                <div class="absolute -left-10 top-0 h-full flex flex-col justify-between text-[10px] text-on-surface-variant font-medium">
+                    <span>60M</span><span>40M</span><span>20M</span><span>0</span>
+                </div>
+                <div class="absolute top-0 right-0 flex gap-4 text-[10px] font-bold">
+                    <div class="flex items-center gap-1"><div class="w-3 h-3 bg-gray-400 opacity-40 rounded-sm"></div> Previous Month</div>
+                    <div class="flex items-center gap-1"><div class="w-3 h-3 bg-gray-400 rounded-sm"></div> Current Month</div>
+                </div>
+            `;
+        }
+
+        function switchTab(tab) {
+            const summaryTab = document.getElementById('tab-summary');
+            const detailsTab = document.getElementById('tab-details');
+            const summaryBtn = document.getElementById('tab-btn-summary');
+            const detailsBtn = document.getElementById('tab-btn-details');
+
+            if (tab === 'summary') {
+                summaryTab.classList.remove('hidden');
+                detailsTab.classList.add('hidden');
+                summaryBtn.classList.add('active-tab');
+                summaryBtn.classList.remove('text-on-surface-variant');
+                detailsBtn.classList.remove('active-tab');
+                detailsBtn.classList.add('text-on-surface-variant');
+            } else {
+                summaryTab.classList.add('hidden');
+                detailsTab.classList.remove('hidden');
+                detailsBtn.classList.add('active-tab');
+                detailsBtn.classList.remove('text-on-surface-variant');
+                summaryBtn.classList.remove('active-tab');
+                summaryBtn.classList.add('text-on-surface-variant');
+            }
+        }
+
+        // Initialize
+        toggleView('annual');
+
+        document.querySelectorAll('circle').forEach(circle => {
+            circle.addEventListener('mouseenter', () => {
+                circle.style.strokeWidth = '5';
+                circle.style.transition = 'stroke-width 0.2s ease-in-out';
+            });
+            circle.addEventListener('mouseleave', () => {
+                circle.style.strokeWidth = '3.8';
+            });
+        });
+    </script>
+</body></html>
