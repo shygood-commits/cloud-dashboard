@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NovaCloud - 최첨단 글래스모피즘 기반 실시간 클라우드 리소스 분석 및 모니터링 대시보드">
+    <title>NovaCloud // Premium Cloud Dashboard</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for premium visual cues -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glow-bg-elements">
+        <div class="glow-circle glow-1" id="glow-circle-1"></div>
+        <div class="glow-circle glow-2" id="glow-circle-2"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar-navigation" id="sidebar-nav">
+            <div class="brand-logo">
+                <i data-lucide="cpu" class="neon-icon-purple"></i>
+                <span>Nova<strong>Cloud</strong></span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="nav-dash"><i data-lucide="layout-dashboard"></i> 대시보드</a>
+                <a href="#" class="nav-item" id="nav-servers"><i data-lucide="server"></i> 인스턴스 관리</a>
+                <a href="#" class="nav-item" id="nav-network"><i data-lucide="activity"></i> 네트워크 트래픽</a>
+                <a href="#" class="nav-item" id="nav-settings"><i data-lucide="settings"></i> 설정</a>
+            </nav>
+            <div class="user-profile-card">
+                <div class="avatar">SG</div>
+                <div class="user-info">
+                    <p class="user-name">Shygood</p>
+                    <p class="user-role">Cloud Architect</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Area -->
+        <main class="main-content">
+            <!-- Header Section -->
+            <header class="dashboard-header">
+                <div class="header-title">
+                    <h1>Cloud Infrastructure Dashboard</h1>
+                    <p class="subtitle">실시간 인프라 가용성 및 리소스 모니터링 시스템</p>
+                </div>
+                <div class="header-actions">
+                    <div class="status-indicator online">
+                        <span class="pulse-dot"></span>
+                        <span class="status-text">Cloud Engine Active</span>
+                    </div>
+                    <button class="btn-refresh" id="btn-refresh-data">
+                        <i data-lucide="refresh-cw"></i>
+                        <span>새로고침</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Metrics Grid -->
+            <section class="metrics-grid">
+                <!-- CPU Metric Card -->
+                <div class="metric-card glass-card" id="card-cpu">
+                    <div class="card-header">
+                        <span class="card-title">CPU 사용량</span>
+                        <i data-lucide="cpu" class="neon-accent-cyan"></i>
+                    </div>
+                    <div class="card-value-container">
+                        <span class="card-value" id="val-cpu">24%</span>
+                        <span class="card-trend upward"><i data-lucide="trending-up"></i> +1.2%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar bar-cyan" id="progress-cpu" style="width: 24%"></div>
+                    </div>
+                </div>
+
+                <!-- Memory Metric Card -->
+                <div class="metric-card glass-card" id="card-memory">
+                    <div class="card-header">
+                        <span class="card-title">메모리 점유율</span>
+                        <i data-lucide="database" class="neon-accent-purple"></i>
+                    </div>
+                    <div class="card-value-container">
+                        <span class="card-value" id="val-memory">58%</span>
+                        <span class="card-trend downward"><i data-lucide="trending-down"></i> -0.4%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar bar-purple" id="progress-memory" style="width: 58%"></div>
+                    </div>
+                </div>
+
+                <!-- Disk Storage Metric Card -->
+                <div class="metric-card glass-card" id="card-disk">
+                    <div class="card-header">
+                        <span class="card-title">스토리지 사용</span>
+                        <i data-lucide="hard-drive" class="neon-accent-pink"></i>
+                    </div>
+                    <div class="card-value-container">
+                        <span class="card-value" id="val-disk">41.8%</span>
+                        <span class="card-trend stable">안정적</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar bar-pink" id="progress-disk" style="width: 41.8%"></div>
+                    </div>
+                </div>
+
+                <!-- Network Metric Card -->
+                <div class="metric-card glass-card" id="card-network">
+                    <div class="card-header">
+                        <span class="card-title">네트워크 대역폭</span>
+                        <i data-lucide="arrow-up-down" class="neon-accent-blue"></i>
+                    </div>
+                    <div class="card-value-container">
+                        <span class="card-value" id="val-network">328 Mb/s</span>
+                        <span class="card-trend upward"><i data-lucide="trending-up"></i> +14%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar bar-blue" id="progress-network" style="width: 65%"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Analytics Grid (Charts & Controls) -->
+            <section class="analytics-grid">
+                <!-- SVG Chart Card -->
+                <div class="chart-container glass-card" id="chart-section">
+                    <div class="chart-header">
+                        <h2>실시간 트래픽 동향 (Real-time Network Traffic)</h2>
+                        <div class="chart-legend">
+                            <span class="legend-item"><span class="legend-color color-cyan"></span> Ingress</span>
+                            <span class="legend-item"><span class="legend-color color-purple"></span> Egress</span>
+                        </div>
+                    </div>
+                    <div class="svg-chart-wrapper">
+                        <!-- Custom SVG Chart -->
+                        <svg id="live-traffic-chart" viewBox="0 0 800 250" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="gradient-cyan" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="rgba(0, 242, 254, 0.4)"/>
+                                    <stop offset="100%" stop-color="rgba(0, 242, 254, 0)"/>
+                                </linearGradient>
+                                <linearGradient id="gradient-purple" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="rgba(157, 78, 221, 0.4)"/>
+                                    <stop offset="100%" stop-color="rgba(157, 78, 221, 0)"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Grid Lines -->
+                            <line x1="0" y1="50" x2="800" y2="50" stroke="rgba(255,255,255,0.05)" stroke-dasharray="5,5"/>
+                            <line x1="0" y1="100" x2="800" y2="100" stroke="rgba(255,255,255,0.05)" stroke-dasharray="5,5"/>
+                            <line x1="0" y1="150" x2="800" y2="150" stroke="rgba(255,255,255,0.05)" stroke-dasharray="5,5"/>
+                            <line x1="0" y1="200" x2="800" y2="200" stroke="rgba(255,255,255,0.05)" stroke-dasharray="5,5"/>
+                            
+                            <!-- Area Gradients -->
+                            <path id="area-ingress" d="" fill="url(#gradient-cyan)"/>
+                            <path id="area-egress" d="" fill="url(#gradient-purple)"/>
+                            
+                            <!-- Chart Lines -->
+                            <path id="path-ingress" d="" fill="none" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+                            <path id="path-egress" d="" fill="none" stroke="#9D4EDD" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Activity Log & Console Terminal -->
+                <div class="console-container glass-card" id="console-section">
+                    <div class="console-header">
+                        <h2>시스템 알림 및 액티비티 로그</h2>
+                        <button class="btn-clear" id="btn-clear-logs">비우기</button>
+                    </div>
+                    <div class="console-terminal-body" id="console-logs">
+                        <div class="log-line system-log">
+                            <span class="log-time">[13:20:01]</span>
+                            <span class="log-tag">[SYSTEM]</span>
+                            <span class="log-text">NovaCloud 모니터링 엔진 초기화 완료.</span>
+                        </div>
+                        <div class="log-line system-log">
+                            <span class="log-time">[13:20:03]</span>
+                            <span class="log-tag">[SYSTEM]</span>
+                            <span class="log-text">클라우드 인스턴스 3개 활성화 감지됨.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instances Control Panel -->
+            <section class="server-control-panel glass-card" id="instances-section">
+                <div class="panel-header">
+                    <h2>서버 인스턴스 실시간 제어 센터</h2>
+                    <span class="badge">AWS / GCP 통합 환경</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="instance-table" id="table-instances">
+                        <thead>
+                            <tr>
+                                <th>인스턴스 이름</th>
+                                <th>IP 주소</th>
+                                <th>리전</th>
+                                <th>상태</th>
+                                <th>CPU 부하</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="instance-list-body">
+                            <!-- Instance 1 -->
+                            <tr id="row-inst-1">
+                                <td class="instance-name-td">
+                                    <i data-lucide="server" class="active-server-icon"></i>
+                                    <span>Web-Server-01</span>
+                                </td>
+                                <td><code>13.125.4.110</code></td>
+                                <td>ap-northeast-2 (서울)</td>
+                                <td><span class="status-badge running" id="status-inst-1">RUNNING</span></td>
+                                <td id="cpu-inst-1">18%</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <button class="btn-action stop" onclick="toggleServer('inst-1', 'stop')"><i data-lucide="square"></i> 정지</button>
+                                        <button class="btn-action restart" onclick="toggleServer('inst-1', 'restart')"><i data-lucide="refresh-cw"></i> 재부팅</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Instance 2 -->
+                            <tr id="row-inst-2">
+                                <td class="instance-name-td">
+                                    <i data-lucide="server" class="active-server-icon"></i>
+                                    <span>Database-Main</span>
+                                </td>
+                                <td><code>54.180.12.87</code></td>
+                                <td>ap-northeast-2 (서울)</td>
+                                <td><span class="status-badge running" id="status-inst-2">RUNNING</span></td>
+                                <td id="cpu-inst-2">35%</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <button class="btn-action stop" onclick="toggleServer('inst-2', 'stop')"><i data-lucide="square"></i> 정지</button>
+                                        <button class="btn-action restart" onclick="toggleServer('inst-2', 'restart')"><i data-lucide="refresh-cw"></i> 재부팅</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Instance 3 -->
+                            <tr id="row-inst-3">
+                                <td class="instance-name-td">
+                                    <i data-lucide="server" class="stopped-server-icon"></i>
+                                    <span>API-Gateway-Dev</span>
+                                </td>
+                                <td><code>3.35.210.42</code></td>
+                                <td>us-east-1 (버진아시아)</td>
+                                <td><span class="status-badge stopped" id="status-inst-3">STOPPED</span></td>
+                                <td id="cpu-inst-3">0%</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <button class="btn-action start" onclick="toggleServer('inst-3', 'start')"><i data-lucide="play"></i> 시작</button>
+                                        <button class="btn-action restart" onclick="toggleServer('inst-3', 'restart')" disabled><i data-lucide="refresh-cw"></i> 재부팅</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Lucide icons loader execution -->
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>
