@@ -682,6 +682,12 @@ function switchTab(tab) {
 
 // ── 8. 로컬 DB 수동 수정 후 웹 배포 즉시 강제 갱신 ──────────────────────────────────
 async function triggerForceSync() {
+    // HTTPS(클라우드플레어) 환경에서 HTTP(로컬 백엔드)로 요청 시 발생하는 Mixed Content 방어 로직
+    if (window.location.protocol === 'https:') {
+        alert('⚠️ 보안 정책(Mixed Content)으로 인해, 암호화된 클라우드플레어 웹 사이트(https)에서는 로컬 PC 백엔드(http)로 직접 동기화 신호를 보낼 수 없습니다.\n\n수동 동기화는 로컬 대시보드 주소 [ http://localhost:3000 ] 에 접속하셔서 실행해 주세요!');
+        return;
+    }
+
     const btn = document.getElementById('btn-force-sync');
     const badge = document.getElementById('sync-badge');
     const icon = document.getElementById('sync-icon');
