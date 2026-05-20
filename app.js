@@ -1,5 +1,9 @@
 'use strict';
 
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? ''
+    : 'http://localhost:3000';
+
 // 전역 상태 관리
 let currentView = 'annual';
 let dashboardData = {
@@ -62,7 +66,7 @@ function setupEventListeners() {
 function startSyncPolling() {
     setInterval(async () => {
         try {
-            const res = await fetch('http://localhost:3000/api/status');
+            const res = await fetch(`${API_BASE}/api/status`);
             if (res.ok) {
                 const status = await res.json();
                 updateSyncBadge(status);
@@ -120,8 +124,8 @@ async function fetchDataAndRender() {
         let sumData, pivotData;
         try {
             const [sumRes, pivotRes] = await Promise.all([
-                fetch('http://localhost:3000/api/costs/summary'),
-                fetch('http://localhost:3000/api/costs/pivot')
+                fetch(`${API_BASE}/api/costs/summary`),
+                fetch(`${API_BASE}/api/costs/pivot`)
             ]);
             if (sumRes.ok && pivotRes.ok) {
                 sumData = await sumRes.json();
@@ -195,8 +199,8 @@ function processRawData() {
     let providerMonthlyTotalsPrev = { AWS: 0, GCP: 0, Azure: 0, Tencent: 0 };
 
     services.forEach(svc => {
-        // 이 서비스가 어느 Provider 소속인지 판별 (첫 번째 매칭 파일명 기준)
-        const sampleFile = svc.monthlyCosts && Object.keys(svc.monthlyCosts).length > 0 ? 'gcp' : 'gcp'; 
+        // 이 서비스가 어느 Provider 소속인지 판별 (SQLite에서 넘어온 fileName 사용)
+        const sampleFile = svc.fileName || 'gcp'; 
         const provider = getProviderFromFileName(sampleFile, svc.name);
 
         providerAnnualTotals[provider] += svc.totalCost;
@@ -708,7 +712,7 @@ async function triggerForceSync() {
     }
     
     try {
-        const res = await fetch('http://localhost:3000/api/sync/force', { method: 'POST' });
+        const res = await fetch(`${API_BASE}/api/sync/force`, { method: 'POST' });
         const result = await res.json();
         
         if (res.ok && result.success) {
@@ -729,7 +733,7 @@ async function triggerForceSync() {
         
         // 동기화 상태 다시 확인 후 뱃지 업데이트
         try {
-            const statusRes = await fetch('http://localhost:3000/api/status');
+            const statusRes = await fetch(`${API_BASE}/api/status`);
             if (statusRes.ok) {
                 const status = await statusRes.json();
                 updateSyncBadge(status);
