@@ -36,6 +36,17 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
     console.error('DB 연결 실패:', err.message);
   } else {
     console.log('SQLite DB 연결 성공:', DB_PATH);
+    
+    // WAL(Write-Ahead Logging) 모드를 활성화하여 
+    // 백엔드 기동 중에도 DB Browser 등 외부 툴의 직접적인 읽기/쓰기 락 충돌을 완전히 방지합니다.
+    db.run('PRAGMA journal_mode=WAL', (err) => {
+      if (err) {
+        console.error('WAL 모드 설정 에러:', err.message);
+      } else {
+        console.log('SQLite WAL (Write-Ahead Logging) 모드 활성화 완료.');
+      }
+    });
+    
     initDatabase();
   }
 });
