@@ -31,3 +31,9 @@ jspm_packages/
 .firebase
 dist/
 build/
+
+# Local databases and raw spreadsheets
+cloud_cost.db*
+*.csv
+*.xlsx
+
