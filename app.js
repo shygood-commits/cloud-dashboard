@@ -62,7 +62,7 @@ function setupEventListeners() {
 function startSyncPolling() {
     setInterval(async () => {
         try {
-            const res = await fetch('/api/status');
+            const res = await fetch('http://localhost:3000/api/status');
             if (res.ok) {
                 const status = await res.json();
                 updateSyncBadge(status);
@@ -120,8 +120,8 @@ async function fetchDataAndRender() {
         let sumData, pivotData;
         try {
             const [sumRes, pivotRes] = await Promise.all([
-                fetch('/api/costs/summary'),
-                fetch('/api/costs/pivot')
+                fetch('http://localhost:3000/api/costs/summary'),
+                fetch('http://localhost:3000/api/costs/pivot')
             ]);
             if (sumRes.ok && pivotRes.ok) {
                 sumData = await sumRes.json();
@@ -702,7 +702,7 @@ async function triggerForceSync() {
     }
     
     try {
-        const res = await fetch('/api/sync/force', { method: 'POST' });
+        const res = await fetch('http://localhost:3000/api/sync/force', { method: 'POST' });
         const result = await res.json();
         
         if (res.ok && result.success) {
@@ -723,7 +723,7 @@ async function triggerForceSync() {
         
         // 동기화 상태 다시 확인 후 뱃지 업데이트
         try {
-            const statusRes = await fetch('/api/status');
+            const statusRes = await fetch('http://localhost:3000/api/status');
             if (statusRes.ok) {
                 const status = await statusRes.json();
                 updateSyncBadge(status);
