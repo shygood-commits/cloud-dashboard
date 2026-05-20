@@ -474,6 +474,27 @@ if (fs.existsSync(WATCH_DIR)) {
 }
 
 // ── Express API 엔드포인트 ─────────────────────────────────────
+app.post('/api/sync/force', (req, res) => {
+  console.log('[API] 사용자 강제 동기화(정적 빌드 및 Git 자동 푸시) 요청 수신');
+  
+  // 상태 업데이트
+  syncStatus.status = '강제 동기화 중...';
+  
+  try {
+    // 멱등적으로 현재 SQLite DB의 최신 수정을 토대로 JSON 파일을 강제 재빌드 및 푸시
+    exportStaticJSON();
+    
+    res.json({ 
+      success: true, 
+      message: '로컬 DB 변경사항을 기반으로 정적 빌드 및 Cloudflare Pages 배포 파이프라인(Git Push)을 즉시 가동했습니다!' 
+    });
+  } catch (err) {
+    console.error('강제 동기화 중 에러:', err.message);
+    syncStatus.status = '동기화 에러';
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 app.get('/api/status', (req, res) => {
   res.json(syncStatus);
 });
